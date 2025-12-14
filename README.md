@@ -8,7 +8,7 @@
 ## 操作方法
 1. 在Package.swift文件中添加需要的仓库数据
 2. 手动触发GitHub Action
-3. GitHub Action执行完毕后会在Action中和Release中同时留下repositories的归档文件。
+3. GitHub Action执行完毕后会在```Action```中和```Release```中同时留下repositories的归档文件。
 4. 下载归档文件，解压。
 5. 将解压后repositories中的仓库文件拷贝到org.swift.swiftpm缓存中。
 ```
