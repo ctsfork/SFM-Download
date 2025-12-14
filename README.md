@@ -20,7 +20,7 @@ open ~/Library/Caches/org.swift.swiftpm/repositories
 
 ## GitHub Action注意事项
 1. 如果需要下载不同的仓库需要修改Download.yml文件中的```ArtifactName```防止之前下载的文件被覆盖
-2. 触发Action方法：
+2. 触发Action的两种方式：
 	- 手动触发：直接在Action中手动触发即可。
 	- 在push时条件触发：提交的msg中包含run，build或Build时会触发Action。
 
