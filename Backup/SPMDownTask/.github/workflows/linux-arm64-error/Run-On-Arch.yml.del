@@ -1,0 +1,121 @@
+## 运行ARM 设备
+
+name: Run-On-Arch
+on: [push, pull_request]
+
+# jobs:
+#   aarch64_job:
+#     runs-on: ubuntu-22.04
+#     name: Build on Ubuntu aarch64
+#     steps:
+#       - uses: actions/checkout@v3
+#       - uses: uraimo/run-on-arch-action@v2
+#         name: Run commands
+#         id: runcmd
+#         with:
+#           arch: aarch64
+#           distro: ubuntu22.04
+
+#           # Not required, but speeds up builds by storing container images in
+#           # a GitHub package registry.
+#           githubToken: ${{ github.token }}
+
+#           # Set an output parameter `uname` for use in subsequent steps
+#           run: |
+#             uname -a
+#             uname -m
+#             ls -la
+#             echo ::set-output name=uname1::$(uname -a)
+#             apt-get install curl
+#             curl -s https://archive.swiftlang.xyz/install.sh | sudo bash
+#             sudo apt-get install swiftlang
+#             swift -version
+
+#       - name: Get the output
+#         # Echo the `uname` output parameter from the `runcmd` step
+#         run: |
+#           echo "The uname output was ${{ steps.runcmd.outputs.uname1 }}"
+#           uname -m
+#           ls -la
+
+
+
+
+
+# jobs:
+#   aarch64_job:
+#     runs-on: ubuntu-20.04
+#     name: Build on Ubuntu aarch64
+#     steps:
+#       - uses: actions/checkout@v3
+#       - uses: uraimo/run-on-arch-action@v2
+#         name: Run commands
+#         id: runcmd
+#         with:
+#           arch: aarch64
+#           distro: ubuntu20.04
+#           # Not required, but speeds up builds by storing container images in
+#           # a GitHub package registry.
+#           githubToken: ${{ github.token }}
+
+#           # Set an output parameter `uname` for use in subsequent steps
+#           shell: /bin/bash
+#           run: |
+#             uname -a
+#             echo ::set-output name=uname1::$(uname -a)
+#             ls -la
+#             ./swift-env-ubuntu-22.04.sh
+#             swift -version
+
+#       - name: Get the output
+#         # Echo the `uname` output parameter from the `runcmd` step
+#         run: |
+#           echo "The uname output was ${{ steps.runcmd.outputs.uname1 }}"
+#           uname -m
+#           ls -la
+
+
+
+          # ./swift-env-ubuntu-22.04.sh
+          # swift -version
+
+
+
+jobs:
+  aarch64_job:
+    runs-on: ubuntu-22.04
+    name: Build on Ubuntu aarch64
+    steps:
+      - uses: actions/checkout@v3
+      - uses: uraimo/run-on-arch-action@v2
+        name: Run commands
+        id: runcmd
+        with:
+          arch: aarch64
+          distro: ubuntu22.04
+          # Not required, but speeds up builds by storing container images in
+          # a GitHub package registry.
+          # githubToken: ${{ github.token }}
+
+          # Set an output parameter `uname` for use in subsequent steps
+          shell: /bin/sh
+          # install: |
+          #   apt-get update -q -y
+          #   apt-get install -q -y git
+          #   apt-get install -q -y wget
+          run: |
+            sudo apt update && sudo apt upgrade
+            sudo apt install curl
+            curl -s https://archive.swiftlang.xyz/install.sh | sudo bash
+            sudo apt install swiftlang
+
+      - name: Get the output
+        # Echo the `uname` output parameter from the `runcmd` step
+        run: |
+          echo "The uname output was ${{ steps.runcmd.outputs.uname1 }}"
+          uname -m
+          ls -la
+      - name: show cot
+        run: ls -la
+
+

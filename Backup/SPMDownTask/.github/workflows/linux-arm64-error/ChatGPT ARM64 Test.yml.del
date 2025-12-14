@@ -1,0 +1,18 @@
+## 运行ARM 设备
+
+name: ChatGPT ARM64 Test
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04 # 使用Ubuntu 20.04操作系统
+    strategy:
+      matrix:
+        os: [ubuntu-20.04]
+        arch: [amd64, arm64] # 构建矩阵，支持amd64和arm64两种架构
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Show System Info
+        run: |
+          uname -a

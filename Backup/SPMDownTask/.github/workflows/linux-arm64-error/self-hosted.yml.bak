@@ -1,0 +1,52 @@
+name: Ubuntu ARM64 With Actions-runner
+on: [push]
+
+
+jobs:
+  x86_64:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-22.04,  macos-12]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup Swift
+        uses: swift-actions/setup-swift@v1
+        with:
+          swift-version: '5.7.0'
+      - name: Show System Info
+        id: system-info
+        run: |
+          echo ${{ matrix.os }}
+          uname -a
+          swift --version
+          
+  linux-arm64:
+    # 表示git commit 中包含linux-arm64字符串时该任务才执行，否则直接跳过
+    if: contains(github.event.head_commit.message, 'linux-arm64')
+    # 通过actions-runner远程使用Termux-Ubuntu系统
+    runs-on: ubuntu-22.04-arm64
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Show System Info
+        run: |
+          uname -a
+          swift --version
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

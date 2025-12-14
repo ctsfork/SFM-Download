@@ -1,0 +1,130 @@
+#
+# GitHub Action 语法参考 
+# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idruns-on
+#
+
+
+name:  Swift Package Manager
+
+on:
+
+  push:
+   branches: [ main , master]
+
+
+
+jobs:
+  artifact-build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-12,  macos-11, macos-10.15, ubuntu-22.04, ubuntu-20.04, ubuntu-18.04]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Show Info
+        run: |
+          uname
+          uname -m
+          echo ${{ matrix.os }}
+      - name: Down Swift Package
+        run: |
+          swift package resolve
+          echo "✅✅✅✅✅✅✅"
+          ls -la .build
+          echo "✅✅✅✅✅✅✅"
+          pwd
+          ls -la
+      - name: Archive SourcePackages
+        run: |
+          sleep 0.5
+          mv .build SourcePackages
+          mkdir -p archive
+          cp Package.resolved archive/
+          sleep 0.5
+          zip -r "archive/${{matrix.os}}-sfm-full.zip" SourcePackages
+          sleep 0.5
+          rm -rf SourcePackages/checkouts
+          sleep 0.5
+          zip -r "archive/${{matrix.os}}-sfm-repositories.zip" SourcePackages
+          sleep 0.5
+
+
+      # 构建预览发布信息
+      - name: Generate Prerelease Release
+        id: create_release
+        run: |
+          echo '### Swift Package Manager' > ReleaseNotes.md
+          echo "" >> ReleaseNotes.md
+          echo "使用方法：" >> ReleaseNotes.md
+          echo "1. 下载Package.resolved文件，并替换本地项目的同名文件。 " >> ReleaseNotes.md
+          echo '2. 下载sfm文件到本地，并替换本地项目的SourcePackages即可。' >> ReleaseNotes.md
+          echo '3. sfm分两个版：sfm-full和sfm-repositories，如果二者大小区别不大，推荐下载sfm-full版本。' >> ReleaseNotes.md
+          echo "" >> ReleaseNotes.md
+
+
+
+      # 发布
+      - name: Publish GitHub Release
+        # if: contains(github.event.head_commit.message, 'Bump version') == false
+        uses: ncipollo/release-action@v1.12.0
+        with:
+          allowUpdates: true
+          replacesArtifacts: true
+          prerelease: false
+          draft: false
+          bodyFile: ReleaseNotes.md
+          artifacts: "./archive/*.zip"
+          tag: "v1.0.0"
+          token: ${{ secrets.GITHUB_TOKEN }}   
+
+
+
+
+
+# #第二个job，将结果推送到另一个仓库
+#   deploy: 
+#     name: 推送到AutoTaskPush
+#     # job执行顺序依赖
+#     needs: build
+
+#     runs-on: ubuntu-latest
+
+#     steps:
+#     - uses: actions/checkout@v2
+
+
+#     ## 拷贝文件到同步目录中
+#     - name: Copy files to sync
+#       run: |
+#         git pull
+#         mkdir -p sync/bt
+#         cp -R bt/tracker sync/bt/tracker
+#         cp -R bt/index.html sync/bt/
+#         mkdir -p sync/vpn
+#         cp -R vpn/list sync/vpn/list
+#         cp -R vpn/list-yaml sync/vpn/list-yaml
+#         cp -R vpn/index.html sync/vpn/
+#         cp -R README.md sync
+#         cp -R index.html sync
+
+
+
+#     # 注意该插件必须在Linux平台上运行
+#     - name: Push to AutoTaskPush
+#       uses: s0/git-publish-subdir-action@develop
+#       env:
+#         REPO: git@github.com:RANSAA/AutoTaskPush.git
+#         BRANCH: master
+#         FOLDER: sync
+#         SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_PRIVATE_KEY }}
+#         SQUASH_HISTORY: true
+#         SKIP_EMPTY_COMMITS: true
+
+
+
+
+### 参考：
+### https://blog.csdn.net/unreliable_narrator/article/details/124468384
+### 
