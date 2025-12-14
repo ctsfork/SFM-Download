@@ -18,6 +18,7 @@ concurrency:
   group: ${{ github.ref }}-${{ github.workflow }}
   cancel-in-progress: true
 
+# permissions: write-all
 permissions:
   contents: write
 
@@ -54,12 +55,18 @@ jobs:
       #      在每个run任务中执行Swift程序时，都需要再设置一次LD_LIBRARY_PATH，否则Swift程序运行时将找不到动态库
       #
       # 修正：
+      #    0. 使用runner-image Ubuntu 22.04自带的版本Swift默认安装路径，配置LD_LIBRARY_PATH的方法示例 - 只需要和自己创建的软连接路径区分即可
+      #     export PATH=/usr/share/swift/usr/bin:"${PATH}"
+      #     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/share/swift/usr/lib/
+      #     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/share/swift/usr/lib/swift/linux/
+      #
       #    1. 使用原来旧的方法每个setp任务都重复导入LD_LIBRARY_PATH配置 - 该方法已被弃用
       #    mkdir -p /opt/swift/current/
       #    ln -s /opt/hostedtoolcache/swift-5.7.3-RELEASE-ubuntu2204/5.7.3/x86_64/usr /opt/swift/current/
       #    export PATH=/opt/swift/current/usr/bin:"${PATH}"
       #    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/swift/current/usr/lib/
       #    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/swift/current/usr/lib/swift/linux/
+      #
       #    2. 直接将LD_LIBRARY_PATH写入Github EVN环境变量中 - ✅推荐使用✅
       #    mkdir -p /opt/swift/current/
       #    ln -sf /opt/hostedtoolcache/swift-5.7.3-RELEASE-ubuntu2204/5.7.3/x86_64/usr /opt/swift/current/
@@ -81,6 +88,8 @@ jobs:
           which swift
           swift -version
           set -e
+
+
 
 
       ## 执行Swift Package Manager Download
