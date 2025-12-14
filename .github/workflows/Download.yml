@@ -105,7 +105,7 @@ jobs:
       - name: Archive Files
         run: |
           set +e
-          tar czf ${{ env.ArtifactName }}.tar.gz .build/repositories
+          tar czf "${{ env.ArtifactName }}.tar.gz" .build/repositories
           set -e
 
 
