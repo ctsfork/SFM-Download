@@ -74,7 +74,7 @@ jobs:
           echo "设置Swift动态库路径......"
           mkdir -p /opt/swift/current/
           ln -sf /opt/hostedtoolcache/swift-5.7.3-RELEASE-ubuntu2204/5.7.3/x86_64/usr /opt/swift/current/
-          echo "/opt/swift/current/usr/bin:" >> $GITHUB_PATH
+          echo "/opt/swift/current/usr/bin" >> $GITHUB_PATH
           echo "LD_LIBRARY_PATH=/opt/swift/current/usr/lib:/opt/swift/current/usr/lib/swift/linux" >> $GITHUB_ENV
           echo "Swift环境变量更新成功！"
           echo "which swift"
