@@ -25,7 +25,7 @@ permissions:
 env:
   # VERSION: "v1.0"
   VERSION: ${{ github.ref_name }}   ##自动从tag读取版本号
-  ArtifactName: "WCDB_v2.1.15"      ##Upload Artifact是文档的名称
+  ArtifactName: "WCDB_v2.1.6 Swift 5.7"      ##Upload Artifact是文档的名称
 
 
 jobs:

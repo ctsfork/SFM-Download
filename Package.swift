@@ -19,7 +19,9 @@ let package = Package(
         //.package(url: "https://github.com/Tencent/wcdb.git" , revision: "abcdef1234567890"),
 
         // 使用from允许解析更高版本，但不会夸主版本
-        .package(url: "https://github.com/Tencent/wcdb.git" , from: "2.1.15"),
+        //.package(url: "https://github.com/Tencent/wcdb.git" , from: "2.1.15"),
+
+        .package(url: "https://github.com/Tencent/wcdb.git" , exact: "2.1.6"),
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
